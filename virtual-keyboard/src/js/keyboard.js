@@ -23,7 +23,10 @@ export class Keyboard {
 
   #addEvent() {
     this.#switchEl.addEventListener("change", this.#onChangeTheme);
-    this.#fontSelectEl.addEventListener("change", this.#onChangeFont);
+    this.#fontSelectEl.addEventListener(
+      "change",
+      this.#onChangeFont.bind(this)
+    );
     document.addEventListener("keydown", this.#onKeyDown.bind(this));
     document.addEventListener("keyup", this.#onKeyUp.bind(this));
     this.#inputEl.addEventListener("input", this.#onInput);
@@ -92,5 +95,6 @@ export class Keyboard {
 
   #onChangeFont(event) {
     document.body.style.fontFamily = event.target.value;
+    this.#inputEl.style.fontFamily = event.target.value;
   }
 }
