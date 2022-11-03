@@ -1,3 +1,12 @@
+import red from '../image/red.jpeg';
+import orange from '../image/orange.jpeg';
+import yellow from '../image/yellow.jpeg';
+import green from '../image/green.jpeg';
+import blue from '../image/blue.jpeg';
+import indigo from '../image/indigo.jpeg';
+import violet from '../image/violet.jpeg';
+import env from './env';
+
 export default class ImageSlider {
   #currentPostion = 0;
 
@@ -23,13 +32,7 @@ export default class ImageSlider {
 
   constructor() {
     this.assignElement();
-    this.initSliderNumber();
-    this.initSlideWidth();
-    this.initSliderListWidth();
-    this.addEvent();
-    this.createIndicator();
-    this.setIndicator();
-    this.initAutoplay();
+    this.addImage();
   }
 
   assignElement() {
@@ -39,6 +42,43 @@ export default class ImageSlider {
     this.previousBtnEl = this.sliderWrapEl.querySelector('#previous');
     this.indicatorWrapEl = this.sliderWrapEl.querySelector('#indicator-wrap');
     this.controlWrapEl = this.sliderWrapEl.querySelector('#control-wrap');
+  }
+
+  addImage() {
+    const realImageList = [];
+    fetch(
+      `https://api.unsplash.com/photos/random?client_id=${env.UNSPLASH_ACCESS_KEY}&count=7`,
+    )
+      .then(res => res.json())
+      .then(v => {
+        v.map(src => realImageList.push(src.urls.regular));
+      })
+      .then(() => {
+        const imageList = [red, orange, yellow, green, blue, indigo, violet];
+
+        [0, 1, 2, 3, 4, 5, 6].forEach(v => {
+          const li = document.createElement('li');
+          const img = document.createElement('img');
+
+          img.src = realImageList[v];
+          img.setAttribute(
+            'onerror',
+            `this.onerror = ''; this.src="${imageList[v]}"`,
+          );
+
+          li.appendChild(img);
+
+          this.sliderListEl.appendChild(li);
+        });
+
+        this.initSliderNumber();
+        this.initSlideWidth();
+        this.initSliderListWidth();
+        this.addEvent();
+        this.createIndicator();
+        this.setIndicator();
+        this.initAutoplay();
+      });
   }
 
   initAutoplay() {
