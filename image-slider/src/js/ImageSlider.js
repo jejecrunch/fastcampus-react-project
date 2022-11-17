@@ -113,7 +113,9 @@ export default class ImageSlider {
       this.controlWrapEl.classList.add('play');
       this.controlWrapEl.classList.remove('pause');
       this.initAutoplay();
-    } else if (event.target.dataset.status === 'pause') {
+    }
+
+    if (event.target.dataset.status === 'pause') {
       this.#autoPlay = false;
       this.controlWrapEl.classList.remove('play');
       this.controlWrapEl.classList.add('pause');
